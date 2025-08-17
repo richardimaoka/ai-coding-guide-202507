@@ -2,6 +2,29 @@
 
 このガイドでは、AIアシスタントと協力してTypeScriptプロジェクトを作成し、テスト駆動開発を体験します。
 
+## 前提: Claude Codeのセットアップ
+
+1. **インストール**
+   ```bash
+   # npmグローバルインストール
+   npm install -g @anthropics/claude-code
+   
+   # またはpnpmの場合
+   pnpm add -g @anthropics/claude-code
+   ```
+
+2. **認証設定**
+   ```bash
+   claude-code auth
+   ```
+   ブラウザで認証を完了してください。
+
+3. **使用方法**
+   ```bash
+   # プロジェクトディレクトリで起動
+   claude-code
+   ```
+
 ## 学習目標
 
 - AIコーディングツールの基本的な使い方を理解する
