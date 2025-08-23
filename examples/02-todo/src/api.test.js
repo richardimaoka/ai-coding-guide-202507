@@ -6,6 +6,7 @@ describe('Database CRUD Operations', () => {
 
   beforeEach(() => {
     db = new Database();
+    db.clearAllTodos();
   });
 
   afterEach(() => {
