@@ -1,15 +1,10 @@
-import sqlite3 from 'sqlite3';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { DatabaseSync } from "node:sqlite";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const dbPath = join(__dirname, '..', 'todos.db');
+const dbPath = "./todos.db";
 
 export class Database {
   constructor() {
-    this.db = new sqlite3.Database(dbPath);
+    this.db = new DatabaseSync(dbPath);
     this.init();
   }
 
@@ -24,7 +19,7 @@ export class Database {
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `;
-    
+
     this.db.run(createTableQuery);
   }
 
@@ -32,14 +27,14 @@ export class Database {
     this.db.close();
   }
 
-  createTodo(title, description = '') {
+  createTodo(title, description = "") {
     return new Promise((resolve, reject) => {
       const query = `
         INSERT INTO todos (title, description)
         VALUES (?, ?)
       `;
-      
-      this.db.run(query, [title, description], function(err) {
+
+      this.db.run(query, [title, description], function (err) {
         if (err) {
           reject(err);
         } else {
@@ -51,16 +46,18 @@ export class Database {
 
   getTodos() {
     return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM todos ORDER BY created_at DESC';
-      
+      const query = "SELECT * FROM todos ORDER BY created_at DESC";
+
       this.db.all(query, [], (err, rows) => {
         if (err) {
           reject(err);
         } else {
-          resolve(rows.map(row => ({
-            ...row,
-            completed: Boolean(row.completed)
-          })));
+          resolve(
+            rows.map((row) => ({
+              ...row,
+              completed: Boolean(row.completed),
+            }))
+          );
         }
       });
     });
@@ -68,8 +65,8 @@ export class Database {
 
   getTodoById(id) {
     return new Promise((resolve, reject) => {
-      const query = 'SELECT * FROM todos WHERE id = ?';
-      
+      const query = "SELECT * FROM todos WHERE id = ?";
+
       this.db.get(query, [id], (err, row) => {
         if (err) {
           reject(err);
@@ -78,7 +75,7 @@ export class Database {
         } else {
           resolve({
             ...row,
-            completed: Boolean(row.completed)
+            completed: Boolean(row.completed),
           });
         }
       });
@@ -89,33 +86,33 @@ export class Database {
     return new Promise((resolve, reject) => {
       const fields = [];
       const values = [];
-      
+
       if (updates.title !== undefined) {
-        fields.push('title = ?');
+        fields.push("title = ?");
         values.push(updates.title);
       }
-      
+
       if (updates.description !== undefined) {
-        fields.push('description = ?');
+        fields.push("description = ?");
         values.push(updates.description);
       }
-      
+
       if (updates.completed !== undefined) {
-        fields.push('completed = ?');
+        fields.push("completed = ?");
         values.push(updates.completed ? 1 : 0);
       }
-      
+
       if (fields.length === 0) {
         resolve(null);
         return;
       }
-      
-      fields.push('updated_at = CURRENT_TIMESTAMP');
+
+      fields.push("updated_at = CURRENT_TIMESTAMP");
       values.push(id);
-      
-      const query = `UPDATE todos SET ${fields.join(', ')} WHERE id = ?`;
-      
-      this.db.run(query, values, function(err) {
+
+      const query = `UPDATE todos SET ${fields.join(", ")} WHERE id = ?`;
+
+      this.db.run(query, values, function (err) {
         if (err) {
           reject(err);
         } else if (this.changes === 0) {
@@ -129,9 +126,9 @@ export class Database {
 
   deleteTodo(id) {
     return new Promise((resolve, reject) => {
-      const query = 'DELETE FROM todos WHERE id = ?';
-      
-      this.db.run(query, [id], function(err) {
+      const query = "DELETE FROM todos WHERE id = ?";
+
+      this.db.run(query, [id], function (err) {
         if (err) {
           reject(err);
         } else {
