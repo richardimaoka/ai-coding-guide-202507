@@ -34,8 +34,8 @@ export class Database {
 
   createTodo(title, description = "") {
     const query = `
-      INSERT INTO todos (title, description)
-      VALUES (?, ?)
+      INSERT INTO todos (title, description, created_at)
+      VALUES (?, ?, datetime('now'))
     `;
 
     const stmt = this.db.prepare(query);
@@ -44,7 +44,7 @@ export class Database {
   }
 
   getTodos() {
-    const query = "SELECT * FROM todos ORDER BY created_at DESC";
+    const query = "SELECT * FROM todos ORDER BY id DESC";
     const stmt = this.db.prepare(query);
     const rows = stmt.all();
     return rows.map((row) => ({
