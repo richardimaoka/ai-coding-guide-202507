@@ -1,0 +1,16 @@
+{
+  "name": "02-todo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "dev": "node src/server.js",
+    "cli": "node src/cli.js"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}
