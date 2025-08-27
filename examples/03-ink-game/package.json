@@ -1,0 +1,16 @@
+{
+  "name": "03-ink-game",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/game.tsx"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "@types/react": "^18.0.0"
+  },
+  "dependencies": {
+    "ink": "^4.0.0",
+    "react": "^18.0.0"
+  }
+}
